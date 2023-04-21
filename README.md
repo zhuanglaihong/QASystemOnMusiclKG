@@ -74,10 +74,10 @@ build_music.py：知识图谱入库脚本    　　
 
 # 1. 脚本结构
 question_classifier.py：问句类型分类脚本  
-question_parser.py：问句解析脚本
-answer_search.py:问句回答脚本
-chatbot_graph.py：图谱问答脚本
-UI.py：设计的UI界面交互脚本
+question_parser.py：问句解析脚本  
+answer_search.py:问句回答脚本  
+chatbot_graph.py：图谱问答脚本  
+UI.py：设计的UI界面交互脚本  
 
 # 2.3　支持问答类型
 
@@ -110,7 +110,7 @@ UI.py：设计的UI界面交互脚本
 
 5、本项目还有不足：没有使用网络模型，后面进行尝试增加。  
 
-------------------------2023.4.21---------------------
+------------------------更新于2023.4.21------------------------
 
 
 作者邮箱：994182204@mail.dlut.edu.cn 
