@@ -8,31 +8,25 @@
 1) 基于网易云音乐的音乐图谱构建
 2) 基于医药知识图谱的自动问答，并设计了UI界面
 
-# 项目最终效果
-话不多少，直接上图。以下两图是实际问答运行过程中的截图：
-![image](https://github.com/liuhuanyong/QABasedOnMedicalKnowledgeGraph/blob/master/img/chat1.png)
+# 项目UI效果
+UI截图：左上角的使用说明中包含有问句提示
+![image](https://github.com/zhuanglaihong/QASystemOnMusiclKG/blob/master/img/demo2.png)
 
-![image](https://github.com/liuhuanyong/QABasedOnMedicalKnowledgeGraph/blob/master/img/chat2.png)
+在文本框中输入问句，按下开始即可回答，点击清除即可清屏
+![image](https://github.com/zhuanglaihong/QASystemOnMusiclKG/blob/master/img/demo1.png)
 
 # 项目运行方式
-1、配置要求：要求配置neo4j数据库及相应的python依赖包。neo4j数据库用户名密码记住，并修改相应文件。  
-2、知识图谱数据导入：python build_medicalgraph.py，导入的数据较多，估计需要几个小时。  
-3、启动问答：python chat_graph.py
+1、配置要求：要求配置neo4j数据库及相应的python依赖包。neo4j数据库用户名密码记住，并在对应位置修改相应文件。这里我  
+2、知识图谱数据导入：python build_music.py，运行时间预计30-40分钟。  
+3、启动问答界面：python UI.py
 
 # 以下介绍详细方案
-# 一、医疗知识图谱构建
-# 1.1 业务驱动的知识图谱构建框架
-![image](https://github.com/liuhuanyong/QABasedOnMedicalKnowledgeGraph/blob/master/img/kg_route.png)
+# 一、音乐知识图谱构建
 
-# 1.2 脚本目录
-
+# 1 脚本目录
 build_music.py：知识图谱入库脚本    　　
 
-# 1.3 医药领域知识图谱规模
-1.3.1 neo4j图数据库存储规模
-![image](https://github.com/liuhuanyong/QABasedOnMedicalKnowledgeGraph/blob/master/img/graph_summary.png)
-
-1.3.2 知识图谱实体类型
+# 2 知识图谱实体类型
 
 | 实体类型 | 中文含义 | 实体数量 |举例 |
 | :--- | :---: | :---: | :--- |
@@ -46,7 +40,7 @@ build_music.py：知识图谱入库脚本    　　
 | Total | 总计 | 44,111 | 约4.4万实体量级|
 
 
-1.3.3 知识图谱实体关系类型
+# 3 知识图谱实体关系类型
 
 | 实体关系类型 | 中文含义 | 关系数量 | 举例|
 | :--- | :---: | :---: | :--- |
@@ -62,7 +56,7 @@ build_music.py：知识图谱入库脚本    　　
 | acompany_with | 疾病并发疾病 | 12,029 | <下肢交通静脉瓣膜关闭不全,并发疾病,血栓闭塞性脉管炎>|
 | Total | 总计 | 294,149 | 约30万关系量级|
 
-1.3.4 知识图谱属性类型
+# 4 知识图谱属性类型
 
 | 属性类型 | 中文含义 | 举例 |
 | :--- | :---: | :---: |
@@ -77,13 +71,13 @@ build_music.py：知识图谱入库脚本    　　
 
 
 # 二、基于医疗知识图谱的自动问答
-# 2.1 技术架构
-![image](https://github.com/liuhuanyong/QABasedOnMedicalKnowledgeGraph/blob/master/img/qa_route.png)
 
-# 2.2 脚本结构
+# 1. 脚本结构
 question_classifier.py：问句类型分类脚本  
-question_parser.py：问句解析脚本  
-chatbot_graph.py：问答程序脚本  
+question_parser.py：问句解析脚本
+answer_search.py:问句回答脚本
+chatbot_graph.py：图谱问答脚本
+UI.py：设计的UI界面交互脚本
 
 # 2.3　支持问答类型
 
@@ -108,16 +102,15 @@ chatbot_graph.py：问答程序脚本
 | disease_easyget | 疾病易感人群 | 什么人容易得高血压？ |
 | disease_desc | 疾病描述 | 糖尿病 |
 
-# 问答结果展示
-
 # 总结
 １、本项目完成了从无到有，以垂直网站为数据来源，构建起以疾病为中心的医疗知识图谱，实体规模4.4万，实体关系规模30万。并基于此，搭建起了一个可以回答18类问题的自动问答小系统,总共耗时3天。其中，数据采集与整理1天，知识图谱构建与入库0.5天，问答系统组件1.5天。总的来说，还是比较快速。      
 2、本项目以业务驱动，构建医疗知识图谱，知识schema设计基于所采集的结构化数据生成(对网页结构化数据进行xpath解析)。    
 3、本项目以neo4j作为存储，并基于传统规则的方式完成了知识问答，并最终以cypher查询语句作为问答搜索sql，支持了问答服务。  
 4、本项目可以快速部署，数据已经放在data/medical.json当中，本项目的数据，如侵犯相关单位权益，请联系我删除。本数据请勿商用，以免引起不必要的纠纷。在本项目中的部署上，可以遵循项目运行步骤，完成数据库搭建，并提供搜索服务。  
 
-5、本项目还有不足：关于疾病的起因、预防等，实际返回的是一大段文字，这里其实可以引入事件抽取的概念，进一步将原因结构化表示出来。这个可以后面进行尝试。    
+5、本项目还有不足：没有使用网络模型，后面进行尝试增加。  
+
+------------------------2023.4.21---------------------
 
 
-如有自然语言处理、知识图谱、事理图谱、社会计算、语言资源建设等问题或合作，可联系我：    
-1、about me:刘焕勇，中国科学院软件研究所，lhy_in_blcu@126.com  
+作者邮箱：994182204@mail.dlut.edu.cn 
