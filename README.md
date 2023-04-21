@@ -16,7 +16,7 @@ UI截图：左上角的使用说明中包含有问句提示
 ![image](https://github.com/zhuanglaihong/QASystemOnMusiclKG/blob/master/img/demo1.png)
 
 # 项目运行方式
-1、配置要求：要求配置neo4j数据库及相应的python依赖包。neo4j数据库用户名密码记住，并在对应位置修改相应文件。这里我  
+1、配置要求：要求配置neo4j数据库及相应的python依赖包。neo4j数据库用户名密码记住，并在对应位置修改相应文件。这里我py2neo的版本是2021.2.3，在登录neo4j时代码和原版不同。
 2、知识图谱数据导入：python build_music.py，运行时间预计30-40分钟。  
 3、启动问答界面：python UI.py
 
