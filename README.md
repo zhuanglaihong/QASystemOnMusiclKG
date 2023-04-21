@@ -23,11 +23,11 @@ UI截图：左上角的使用说明中包含有问句提示
 ## 以下介绍详细方案
 # 一、音乐知识图谱构建
 
-# 1 脚本目录
+# 1 脚本
 build_music.py：知识图谱入库脚本    　　
-![image](https://github.com/zhuanglaihong/QASystemOnMusiclKG/blob/master/img/neo4j.png)
 
-# 2 知识图谱属性类型
+# 2 基于neo4j的知识图谱
+![image](https://github.com/zhuanglaihong/QASystemOnMusiclKG/blob/master/img/neo4j.png)
 
 |  实体类型 |  实体关系类型 | 属性键 |
 | :--- | :---: | :---: |
@@ -37,7 +37,6 @@ build_music.py：知识图谱入库脚本    　　
 | 歌曲内容 | 歌曲内容 | 歌曲内容 |
 | 歌单 | 歌单 | 歌单 |
 |  | 相似歌曲 | 相似歌曲 |
-
 
 
 
@@ -54,24 +53,14 @@ UI.py：设计的UI界面交互脚本
 
 | 问句类型 | 中文含义 | 问句举例 |
 | :--- | :---: | :---: |
-| disease_symptom | 疾病症状| 乳腺癌的症状有哪些？ |
-| symptom_disease | 已知症状找可能疾病 | 最近老流鼻涕怎么办？ |
-| disease_cause | 疾病病因 | 为什么有的人会失眠？|
-| disease_acompany | 疾病的并发症 | 失眠有哪些并发症？ |
-| disease_not_food | 疾病需要忌口的食物 | 失眠的人不要吃啥？ |
-| disease_do_food | 疾病建议吃什么食物 | 耳鸣了吃点啥？ |
-| food_not_disease | 什么病最好不要吃某事物 | 哪些人最好不好吃蜂蜜？ |
-| food_do_disease | 食物对什么病有好处| 鹅肉有什么好处？ |
-| disease_drug | 啥病要吃啥药 | 肝病要吃啥药？ |
-| drug_disease | 药品能治啥病 | 板蓝根颗粒能治啥病？ |
-| disease_check | 疾病需要做什么检查 | 脑膜炎怎么才能查出来？|
-| check_disease |　检查能查什么病 | 全血细胞计数能查出啥来？ |
-| disease_prevent | 预防措施| 怎样才能预防肾虚？ |
-| disease_lasttime | 治疗周期 | 感冒要多久才能好？ |
-| disease_cureway | 治疗方式 | 高血压要怎么治？ |
-| disease_cureprob | 治愈概率 | 白血病能治好吗？ |
-| disease_easyget | 疾病易感人群 | 什么人容易得高血压？ |
-| disease_desc | 疾病描述 | 糖尿病 |
+|1.song_desc 	|	歌曲描述(回答歌词的信息)	  |  爱情转移 |
+|2.artist_desc	|	歌手描述(回答歌曲+专辑)	  |  陈奕迅|
+|3.artist_name	|	歌曲演唱者(问的是某一首歌是谁唱的)	 |   红玫瑰的演唱者是谁|
+|4.artist_song	|	歌手唱的歌(回答歌手的所有曲子)	  |  陈奕迅唱的歌|
+|5.album_artist	|	专辑属于哪个歌手(回答发布专辑的歌手)	 |   陈奕迅发布的专辑|
+|6.album_song	|	专辑包含的歌曲(回答专辑下的曲目)	 |   三人主义包含有什么歌|
+|7.similar_songs	|	相似歌曲推荐(回答相似歌曲)	 |   和红玫瑰类似的歌有什么|
+|8.playlist_song	|	歌单里的歌曲(回答歌单)	 |   包含红玫瑰的歌单有什么|
 
 # 总结
 １、本项目参考QABasedOnMedicalKnowledgeGraph，构建起以歌曲为中心的音乐知识图谱，实体规模3.5万，实体关系规模13万，搭建起了一个可以回答8类问题的问答QA系统。    
@@ -79,7 +68,7 @@ UI.py：设计的UI界面交互脚本
 3、本项目可以快速部署，数据已经放在data/163music.json当中，本项目的数据来源于网络，不是使用爬虫爬取，所以节点与关系的类型较少。
 4、自行设计的UI界面，界面交互更友好
 
-# 本项目还有不足
+# 不足
 1.没有使用网络模型，后面进行尝试增加。 
 2.在问题类型'artist_desc'中的回答是问题'artist_song'和'album_artist'的简单结合，没有额外的歌手信息
 3.输入问题时有时候会识别到多个歌曲类型，例如：输入歌曲'晴天'有时候会返回歌曲'晴'，分词处理上还要加强
