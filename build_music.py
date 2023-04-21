@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # coding: utf-8
-
+# File: build_music.py
+# Author: zlh<994182204@mail.dlut.edu.cn>
+# Date: 23-4-21
 
 import os
 import json
