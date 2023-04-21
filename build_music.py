@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
-# File: MedicalGraph.py
-# Author: lhy<lhy_in_blcu@126.com,https://huangyong.github.io>
-# Date: 18-10-3
+
 
 import os
 import json
@@ -14,7 +12,7 @@ class MusicGraph:
     def __init__(self):
         cur_dir = '/'.join(os.path.abspath(__file__).split('/')[:-1])
         self.data_path = os.path.join(cur_dir, 'data/163music.json')
-        self.g = Graph('http://localhost:7474/', auth=("neo4j", "zlh123456"), name='neo4j')
+        self.g = Graph('http://localhost:7474/', auth=("neo4j", "zlh123456"), name='neo4j') # 自己修改对应用户名和密码
 
     '''读取文件'''
 
