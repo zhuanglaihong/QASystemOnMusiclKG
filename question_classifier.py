@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # coding: utf-8
-# File: question_classifier.py
-# Author: lhy<lhy_in_blcu@126.com,https://huangyong.github.io>
-# Date: 18-10-4
+# File: answer_search.py
+# Author: zlh<994182204@mail.dlut.edu.cn>
+# Date: 23-4-21
 
 import os
 import ahocorasick
