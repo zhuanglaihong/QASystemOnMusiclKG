@@ -8,11 +8,7 @@ from py2neo import Graph
 
 class AnswerSearcher:
     def __init__(self):
-        self.g = Graph(
-            host="127.0.0.1",
-            http_port=7474,
-            user="lhy",
-            password="lhy123")
+        self.g = Graph('http://localhost:7474/', auth=("neo4j", "zlh123456"), name='neo4j')
         self.num_limit = 20
 
     '''执行cypher查询，并返回相应结果'''
@@ -34,103 +30,52 @@ class AnswerSearcher:
     def answer_prettify(self, question_type, answers):
         final_answer = []
         if not answers:
-            return ''
-        if question_type == 'disease_symptom':
-            desc = [i['n.name'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}的症状包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return '回答失败，请重新输入'
 
-        elif question_type == 'symptom_disease':
+        if question_type == 'song_desc':
+            desc = [i['m.歌曲内容'] for i in answers]
+            subject = answers[0]['m.name']
+            final_answer = '{0}的歌曲介绍：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+
+        elif question_type == 'artist_name':
+            desc = [i['m.歌手'] for i in answers]
+            subject = answers[0]['m.name']
+            final_answer = '歌曲{0}的演唱者是：{1}'.format(subject, '；'.join(list(set(desc[0]))[:self.num_limit]))
+
+        elif question_type == 'artist_song':
             desc = [i['m.name'] for i in answers]
             subject = answers[0]['n.name']
-            final_answer = '症状{0}可能染上的疾病有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            final_answer = '歌手{0}的演唱曲目有：{1}等等'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
-        elif question_type == 'disease_cause':
-            desc = [i['m.cause'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}可能的成因有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_prevent':
-            desc = [i['m.prevent'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}的预防措施包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_lasttime':
-            desc = [i['m.cure_lasttime'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}治疗可能持续的周期为：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_cureway':
-            desc = [';'.join(i['m.cure_way']) for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}可以尝试如下治疗：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_cureprob':
-            desc = [i['m.cured_prob'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}治愈的概率为（仅供参考）：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_easyget':
-            desc = [i['m.easy_get'] for i in answers]
-            subject = answers[0]['m.name']
-
-            final_answer = '{0}的易感人群包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_desc':
-            desc = [i['m.desc'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0},熟悉一下：{1}'.format(subject,  '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_acompany':
-            desc1 = [i['n.name'] for i in answers]
-            desc2 = [i['m.name'] for i in answers]
-            subject = answers[0]['m.name']
+        elif question_type == 'artist_desc':
+            #print(answers[5])
+            desc1 = [i['m.name'] for i in answers[0:5] ]  # 由于两条sql语句一起，这里需要过滤
+            desc2 = [i['a.name'] for i in answers[5:10] ] # 注意修改条目数，各自五条
+            subject = answers[0]['n.name']
             desc = [i for i in desc1 + desc2 if i != subject]
-            final_answer = '{0}的症状包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            final_answer = '歌手{0}的信息包括:\n1.歌曲：{1} 等等 \n 2.专辑《{2}》等等'.format(subject, '；'.join(list(set(desc1))[:self.num_limit]),'》；《'.join(list(set(desc2))[:self.num_limit]))
 
-        elif question_type == 'disease_not_food':
+        elif question_type == 'album_artist':
             desc = [i['n.name'] for i in answers]
             subject = answers[0]['m.name']
-            final_answer = '{0}忌食的食物包括有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            final_answer = '歌手{0}发布的专辑包括有：《{1}》等等'.format(subject, '》；《'.join(list(set(desc))[:self.num_limit]))
 
-        elif question_type == 'disease_do_food':
-            do_desc = [i['n.name'] for i in answers if i['r.name'] == '宜吃']
-            recommand_desc = [i['n.name'] for i in answers if i['r.name'] == '推荐食谱']
+        elif question_type == 'similar_songs':
+            do_desc = [i['n.name'] for i in answers]
             subject = answers[0]['m.name']
-            final_answer = '{0}宜食的食物包括有：{1}\n推荐食谱包括有：{2}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]), ';'.join(list(set(recommand_desc))[:self.num_limit]))
+            final_answer = '歌曲{0}推荐曲目有：{1} 等等'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]))
 
-        elif question_type == 'food_not_disease':
+        elif question_type == 'album_song':
             desc = [i['m.name'] for i in answers]
             subject = answers[0]['n.name']
-            final_answer = '患有{0}的人最好不要吃{1}'.format('；'.join(list(set(desc))[:self.num_limit]), subject)
+            final_answer = '专辑{0}包含有歌曲：{1}'.format(subject,'；'.join(list(set(desc))[:self.num_limit]))
 
-        elif question_type == 'food_do_disease':
-            desc = [i['m.name'] for i in answers]
-            subject = answers[0]['n.name']
-            final_answer = '患有{0}的人建议多试试{1}'.format('；'.join(list(set(desc))[:self.num_limit]), subject)
-
-        elif question_type == 'disease_drug':
+        elif question_type == 'playlist_song':
             desc = [i['n.name'] for i in answers]
             subject = answers[0]['m.name']
-            final_answer = '{0}通常的使用的药品包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'drug_disease':
-            desc = [i['m.name'] for i in answers]
-            subject = answers[0]['n.name']
-            final_answer = '{0}主治的疾病有{1},可以试试'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'disease_check':
-            desc = [i['n.name'] for i in answers]
-            subject = answers[0]['m.name']
-            final_answer = '{0}通常可以通过以下方式检查出来：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
-
-        elif question_type == 'check_disease':
-            desc = [i['m.name'] for i in answers]
-            subject = answers[0]['n.name']
-            final_answer = '通常可以通过{0}检查出来的疾病有{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            final_answer = '包含歌曲{0}的歌单有：《{1}》等等'.format(subject,'》；《'.join(list(set(desc))[:self.num_limit]))
 
         return final_answer
-
 
 if __name__ == '__main__':
     searcher = AnswerSearcher()
