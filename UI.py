@@ -1,8 +1,16 @@
+#!/usr/bin/env python3
+# coding: utf-8
+# File: answer_search.py
+# Author: zlh<994182204@mail.dlut.edu.cn>
+# Date: 23-4-21
+
+
 import tkinter as tk
-import time
-from tkinter.messagebox import *
-from chatbot_graph import *
 from tkinter import *
+import time
+from chatbot_graph import *
+
+
 face_1 = tk.Tk()
 handler = ChatBotGraph()
 timestr = time.strftime("%H:%M:%S")  # 获取当前的时间并转化为字符串
